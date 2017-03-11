@@ -42,7 +42,7 @@ $Command;
 
 foreach(Files as $File => $Patch) {
 	$Command = sprintf(
-		'diff -urN %s %s > %s',
+		'diff -urN --strip-trailing-cr %s %s > %s',
 		escapeshellarg(Pathify(ProjectRoot.StockDir.$File)),
 		escapeshellarg(Pathify(ProjectRoot.ModDir.$File)),
 		escapeshellarg(Pathify(ProjectRoot.PatchDir.$Patch))
