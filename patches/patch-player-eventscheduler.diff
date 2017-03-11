@@ -1,0 +1,61 @@
+--- "..\\avorion-0.10.2\\data\\scripts\\player\\eventscheduler.lua"	2017-03-10 18:13:28.444924300 -0600
++++ "..\\avorion-event-balance\\data\\scripts\\player\\eventscheduler.lua"	2017-03-10 16:14:58.000000000 -0600
+@@ -5,6 +5,10 @@
+ require ("randomext")
+ require ("utility")
+ 
++-- <dcc title="require event balancer">
++require ("dcc-event-balance/main")
++-- </dcc>
++
+ local events =
+ {
+     {schedule = random():getInt(45, 60) * 60, script = "convoidistresssignal", arguments = {true}, to = 560},
+@@ -17,7 +21,10 @@
+     {schedule = random():getInt(50, 70) * 60, script = "spawntravellingmerchant", to = 520},
+ }
+ 
+-local pause = 5 * 60
++-- <dcc title="increase event delay">
++local pause = (5 * 60) * EventBalance.PauseMultiplier
++-- </dcc>
++
+ local pauseTime = pause
+ 
+ function initialize()
+@@ -31,7 +38,6 @@
+     end
+ 
+     print ("player events roughly every " .. round((1 / frequency + pause) / 60, 2) .. " minutes")
+-
+ end
+ 
+ function getUpdateInterval()
+@@ -50,8 +56,10 @@
+         if p.index < player.index then return end
+     end
+ 
+-    -- but, if we're not alone, we speed up events by 50%
+-    if #players > 1 then timeStep = timeStep * 1.5 end
++    -- <dcc title="disable multiple players speeding up events">
++    -- -- but, if we're not alone, we speed up events by 50%
++    -- if #players > 1 then timeStep = timeStep * 1.5 end
++    -- </dcc>
+ 
+     if pauseTime > 0 then
+         pauseTime = pauseTime - timeStep
+@@ -69,6 +77,14 @@
+ 
+             local position = length(vec2(Sector():getCoordinates()))
+             if position >= from and position <= to then
++
++                -- <dcc title="determine if event should be skipped">
++                if EventBalance.ShouldSkipEvent(event) then
++                    print("event `" .. event.script .. "` skipped")
++                    return
++                end
++                -- </dcc>
++
+                 -- start event
+                 local arguments = event.arguments or {}
+                 Player():addScriptOnce(event.script, unpack(arguments))
