@@ -45,6 +45,7 @@ function initialize()
     -- <dcc title="determine if the event should be skipped">
     if EventBalance.ShouldSkipEvent({script="piratesbeingfuckingannoying"}) then
         print("pirate event skipped")
+	terminate()
         return
     end
     -- </dcc>
@@ -164,7 +165,7 @@ function initialize()
 end
 
 function getUpdateInterval()
-    return 15
+    return 15 * EventBalance.PauseMultiplier
 end
 
 function update(timeStep)
