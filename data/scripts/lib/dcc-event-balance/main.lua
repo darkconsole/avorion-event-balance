@@ -22,9 +22,9 @@
 --------------------------------------------------------------------------------
 
 EventBalance = {
-	PauseMultiplier = 0,     -- mutiplier for delay between events
+	PauseMultiplier = 8,     -- mutiplier for delay between events
 	SkipWindow      = 33.0,  -- percentage of sector volume to skip.
-	SkipChance      = 3      -- flat chance to skip. 1 = 0%, 2 = 50%, 3 = 66%, 4 = 75%, etc.
+	SkipChance      = 4      -- flat chance to skip. 1 = 0%, 2 = 50%, 3 = 66%, 4 = 75%, etc.
 }
 
 --------------------------------------------------------------------------------
@@ -141,6 +141,6 @@ function EventBalance.ShouldSkipEvent_ByFlatChance(Event)
 -- decide if we should skip the event based on a stupid flat chance.
 
 	if(EventBalance.SkipChance > 0) then
-		return random():getInt(1,EventBalance.SkipChance) ~= 1
+		return random():getInt(1,EventBalance.SkipChance) == 1
 	end
 end
