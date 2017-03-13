@@ -3,6 +3,8 @@
 --------------------------------------------------------------------------------
 -- darkconsole <darkcee.legit@gmail.com> ---------------------------------------
 
+--[[ SEE README.MD FOR DETAILS YO ]]--
+
 --------------------------------------------------------------------------------
 -- STOCK FILE MODIFICATIONS ----------------------------------------------------
 --------------------------------------------------------------------------------
@@ -23,7 +25,9 @@
 
 EventBalance = {
 	PauseMultiplier = 8,     -- mutiplier for delay between events
-	SkipWindow      = 33.0,  -- percentage of sector volume to skip.
+	SkipWindowCap   = 10,    -- max ships before we stop curving chance
+	SkipWindowFlex  = 0.75,  -- multiplier for ship count impact
+	SkipWindow      = 33.0,  -- percentage of sector volume ripe for attack
 	SkipChance      = 4      -- flat chance to skip. 1 = 0%, 2 = 50%, 3 = 66%, 4 = 75%, etc.
 }
 
@@ -70,6 +74,22 @@ function EventBalance.GetSectorShipInfo(Coord)
 	--------
 
 	return Count, Volume, VolumeAverage
+end
+
+function EventBalance.GetFactoredSkipWindow(ShipCount)
+-- @argv Float SkipWindow, Int ShipCount
+-- @argv Float
+-- modify the skip window based on how many ships are in this sector. this is to
+-- attempt to simulate the pirates needing to be sure they want to attack the
+-- sector by narrowing the window the more ships there are.
+
+	if(ShipCount > EventBalance.SkipWindowCap) then
+		ShipCount = EventBalance.SkipWindowCap
+	elseif(ShipCount < 1) then
+		ShipCount = 0
+	end
+
+	return EventBalance.SkipWindow - (ShipCount * EventBalance.SkipWindowFlex)
 end
 
 function EventBalance.ShouldSkipEvent(Event)
@@ -122,17 +142,23 @@ function EventBalance.ShouldSkipEvent_BySectorVolume(Event)
 	= EventBalance.GetSectorShipInfo(Sector():getCoordinates())
 
 	local SectorAverageVolume = Balancing_GetSectorShipVolume(Sector():getCoordinates())
-	local SectorAllowedDiff = (EventBalance.SkipWindow * SectorAverageVolume) / 100
+	local SectorAllowedDiff = (EventBalance.GetFactoredSkipWindow(ShipTotalCount) * SectorAverageVolume) / 100
 
-	print("---- Event Balancer: Sector Analysis (" .. Event.script .. ") ----")
-	print("Number of Ships In Sector: " .. ShipTotalCount)
-	print("Volume of Ships In Sector: " .. ShipTotalVolume)
-	print("Sector Expected Average Volume Per Ship: " .. SectorAverageVolume)
-	print("Sector Actual Average Volume Per Ship: " .. ShipAverageVolume)
-	print("Sector Allowed Difference (" .. EventBalance.SkipWindow .. "%): " .. SectorAllowedDiff)
+	print("---- Event Balancer: Sector Analysis (" .. Event.script .. ")")
+	print("-- Ships In Sector: Total(" .. ShipTotalCount .. "), Volume(" .. ShipTotalVolume .. "), AverageVolume(" .. ShipAverageVolume .. ")")
+	print("-- Sector Values: AverageVolume(" .. SectorAverageVolume .. ") AllowedDiff(" .. SectorAllowedDiff .. " (" .. EventBalance.SkipWindow .. "%))")
 
-	-- @todo - 2017-03-08
-	-- math
+	if(ShipAverageVolume <= SectorAverageVolume - SectorAllowedDiff) then
+		print(">> " .. ShipAverageVolume .. " <= " .. (SectorAverageVolume - SectorAllowedDiff))
+		print(">> sector too boring for attack")
+		return true
+	elseif(ShipAverageVolume >= SectorAverageVolume + SectorAllowedDiff) then
+		print(">> " .. ShipAverageVolume .. " >= " .. (SectorAverageVolume + SectorAllowedDiff))
+		print(">> sector too strong for attack")
+		return true
+	end
+
+	print("")
 
 	return false
 end
@@ -143,4 +169,6 @@ function EventBalance.ShouldSkipEvent_ByFlatChance(Event)
 	if(EventBalance.SkipChance > 0) then
 		return random():getInt(1,EventBalance.SkipChance) == 1
 	end
+
+	return false
 end
