@@ -53,7 +53,7 @@ booty.
 
 * The closer to the center you are the more often you will have to fight things.
 A fleet that broke the sector average in the start zone may not have the over
-all volume to do so near the center without upgrades.
+all volume to do so near the center without retrofits.
 
 ## Part III: Simulate space being even vaster...
 
