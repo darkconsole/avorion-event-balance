@@ -28,7 +28,8 @@ EventBalance = {
 	SkipWindowCap   = 10,    -- max ships before we stop curving chance
 	SkipWindowFlex  = 0.75,  -- multiplier for ship count impact
 	SkipWindow      = 33.0,  -- percentage of sector volume ripe for attack
-	SkipChance      = 4      -- flat chance to skip. 1 = 0%, 2 = 50%, 3 = 66%, 4 = 75%, etc.
+	SkipChance      = 4,     -- flat chance to skip. 1 = 0%, 2 = 50%, 3 = 66%, 4 = 75%, etc.
+	Debug           = true   -- if we should print stupid things to console.
 }
 
 --------------------------------------------------------------------------------
@@ -144,21 +145,32 @@ function EventBalance.ShouldSkipEvent_BySectorVolume(Event)
 	local SectorAverageVolume = Balancing_GetSectorShipVolume(Sector():getCoordinates())
 	local SectorAllowedDiff = (EventBalance.GetFactoredSkipWindow(ShipTotalCount) * SectorAverageVolume) / 100
 
-	print("---- Event Balancer: Sector Analysis (" .. Event.script .. ")")
-	print("-- Ships In Sector: Total(" .. ShipTotalCount .. "), Volume(" .. ShipTotalVolume .. "), AverageVolume(" .. ShipAverageVolume .. ")")
-	print("-- Sector Values: AverageVolume(" .. SectorAverageVolume .. ") AllowedDiff(" .. SectorAllowedDiff .. " (" .. EventBalance.SkipWindow .. "%))")
-
-	if(ShipAverageVolume <= SectorAverageVolume - SectorAllowedDiff) then
-		print(">> " .. ShipAverageVolume .. " <= " .. (SectorAverageVolume - SectorAllowedDiff))
-		print(">> sector too boring for attack")
-		return true
-	elseif(ShipAverageVolume >= SectorAverageVolume + SectorAllowedDiff) then
-		print(">> " .. ShipAverageVolume .. " >= " .. (SectorAverageVolume + SectorAllowedDiff))
-		print(">> sector too strong for attack")
-		return true
+	if(EventBalance.Debug)
+	then
+		print("---- Event Balancer: Sector Analysis (" .. Event.script .. ")")
+		print("-- Ships In Sector: Total(" .. ShipTotalCount .. "), Volume(" .. ShipTotalVolume .. "), AverageVolume(" .. ShipAverageVolume .. ")")
+		print("-- Sector Values: AverageVolume(" .. SectorAverageVolume .. ") AllowedDiff(" .. SectorAllowedDiff .. " (" .. EventBalance.SkipWindow .. "%))")
 	end
 
-	print("")
+	if(ShipAverageVolume <= SectorAverageVolume - SectorAllowedDiff) then
+		if(EventBalance.Debug)
+		then
+			print(">> " .. ShipAverageVolume .. " <= " .. (SectorAverageVolume - SectorAllowedDiff))
+			print(">> sector too boring for attack")
+			print(" ")
+		end
+
+		return true
+	elseif(ShipAverageVolume >= SectorAverageVolume + SectorAllowedDiff) then
+		if(EventBalance.Debug)
+		then
+			print(">> " .. ShipAverageVolume .. " >= " .. (SectorAverageVolume + SectorAllowedDiff))
+			print(">> sector too strong for attack")
+			print(" ")
+		end
+
+		return true
+	end
 
 	return false
 end
