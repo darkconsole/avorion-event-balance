@@ -27,6 +27,7 @@ EventBalance = {
 	PauseMultiplier = 8,     -- mutiplier for delay between events
 	SkipWindowCap   = 10,    -- max ships before we stop curving chance
 	SkipWindowFlex  = 0.75,  -- multiplier for ship count impact
+	SkipWindowFloat = 2000,
 	SkipWindow      = 33.0,  -- percentage of sector volume ripe for attack
 	SkipChance      = 4,     -- flat chance to skip. 1 = 0%, 2 = 50%, 3 = 66%, 4 = 75%, etc.
 	Debug           = true   -- if we should print stupid things to console.
@@ -35,6 +36,8 @@ EventBalance = {
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+
+-- vscode-fold=1
 
 require("galaxy")
 
@@ -152,24 +155,24 @@ function EventBalance.ShouldSkipEvent_BySectorVolume(Event)
 		print("-- Sector Values: AverageVolume(" .. SectorAverageVolume .. ") AllowedDiff(" .. SectorAllowedDiff .. " (" .. EventBalance.SkipWindow .. "%))")
 	end
 
-	if(ShipAverageVolume <= SectorAverageVolume - SectorAllowedDiff) then
+	if(ShipAverageVolume <= (SectorAverageVolume + EventBalance.SkipWindowFloat) - SectorAllowedDiff) then
 		if(EventBalance.Debug)
 		then
-			print(">> " .. ShipAverageVolume .. " <= " .. (SectorAverageVolume - SectorAllowedDiff))
+			print(">> " .. ShipAverageVolume .. " <= " .. (SectorAverageVolume - SectorAllowedDiff) .. " + " .. EventBalance.SkipWindowFloat)
 			print(">> sector too boring for attack")
 			print(" ")
 		end
 
-		return true
-	elseif(ShipAverageVolume >= SectorAverageVolume + SectorAllowedDiff) then
+		return EventBalance.ShouldSkipEvent_ByFlatChance(Event)
+	elseif(ShipAverageVolume >= (SectorAverageVolume + EventBalance.SkipWindowFloat) + SectorAllowedDiff) then
 		if(EventBalance.Debug)
 		then
-			print(">> " .. ShipAverageVolume .. " >= " .. (SectorAverageVolume + SectorAllowedDiff))
+			print(">> " .. ShipAverageVolume .. " >= " .. (SectorAverageVolume + SectorAllowedDiff) .. " + " .. EventBalance.SkipWindowFloat)
 			print(">> sector too strong for attack")
 			print(" ")
 		end
 
-		return true
+		return EventBalance.ShouldSkipEvent_ByFlatChance(Event)
 	end
 
 	return false
@@ -179,7 +182,7 @@ function EventBalance.ShouldSkipEvent_ByFlatChance(Event)
 -- decide if we should skip the event based on a stupid flat chance.
 
 	if(EventBalance.SkipChance > 0) then
-		return random():getInt(1,EventBalance.SkipChance) == 1
+		return not random():getInt(1,EventBalance.SkipChance) == 1
 	end
 
 	return false
