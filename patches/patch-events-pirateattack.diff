@@ -1,5 +1,5 @@
---- "..\\avorion-0.10.5\\data\\scripts\\events\\pirateattack.lua"	2017-03-02 20:37:56.235298500 -0600
-+++ "..\\avorion-event-balance\\data\\scripts\\events\\pirateattack.lua"	2017-03-11 10:52:36.000000000 -0600
+--- ../avorion-0.10.5/data/scripts/events/pirateattack.lua	2017-03-02 20:37:56.235298500 -0600
++++ ../avorion-event-balance/data/scripts/events/pirateattack.lua	2017-03-11 10:52:36.000000000 -0600
 @@ -6,6 +6,11 @@
  require ("galaxy")
  require ("randomext")
