@@ -6,10 +6,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 define('ProjectRoot','..');
-define('StockDir', '/avorion-0.10.2/data/scripts');
+define('StockDir', '/avorion-0.10.5/data/scripts');
 define('ModDir', '/avorion-event-balance/data/scripts');
 define('PatchDir', '/avorion-event-balance/patches');
-define('RemoteDir','z:\home\a1270\steam_games\avorion\data\scripts');
+define('RemoteDir','z:\home\avorion\steamcmd\avorion\data\scripts');
 
 define('Files',[
 	'/lib/dcc-event-balance/main.lua' => '/patch-lib-dcc-event-balance-main.diff',

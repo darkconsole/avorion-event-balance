@@ -7,7 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 define('ProjectRoot','..');
-define('StockDir', '/avorion-0.10.2/data/scripts');
+define('StockDir', '/avorion-0.10.5/data/scripts');
 define('ModDir', '/avorion-event-balance/data/scripts');
 define('PatchDir', '/avorion-event-balance/patches');
 

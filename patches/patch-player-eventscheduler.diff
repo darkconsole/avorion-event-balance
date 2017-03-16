@@ -1,4 +1,4 @@
---- "..\\avorion-0.10.2\\data\\scripts\\player\\eventscheduler.lua"	2017-03-10 13:19:48.758721700 -0600
+--- "..\\avorion-0.10.5\\data\\scripts\\player\\eventscheduler.lua"	2017-03-02 20:37:56.714796900 -0600
 +++ "..\\avorion-event-balance\\data\\scripts\\player\\eventscheduler.lua"	2017-03-15 15:26:05.000000000 -0500
 @@ -5,6 +5,10 @@
  require ("randomext")

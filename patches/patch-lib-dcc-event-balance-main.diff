@@ -1,4 +1,4 @@
---- "..\\avorion-0.10.2\\data\\scripts\\lib\\dcc-event-balance\\main.lua"	1969-12-31 18:00:00.000000000 -0600
+--- "..\\avorion-0.10.5\\data\\scripts\\lib\\dcc-event-balance\\main.lua"	1969-12-31 18:00:00.000000000 -0600
 +++ "..\\avorion-event-balance\\data\\scripts\\lib\\dcc-event-balance\\main.lua"	2017-03-16 16:44:56.437463900 -0500
 @@ -0,0 +1,189 @@
 +--------------------------------------------------------------------------------
