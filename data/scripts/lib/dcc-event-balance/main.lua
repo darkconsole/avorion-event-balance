@@ -27,9 +27,9 @@ EventBalance = {
 	PauseMultiplier = 8,     -- mutiplier for delay between events
 	SkipWindowCap   = 10,    -- max ships before we stop curving chance
 	SkipWindowFlex  = 0.75,  -- multiplier for ship count impact
-	SkipWindowFloat = 2000,
+	SkipWindowFloat = 750,   -- artificially float the sector's actual average
 	SkipWindow      = 33.0,  -- percentage of sector volume ripe for attack
-	SkipChance      = 4,     -- flat chance to skip. 1 = 0%, 2 = 50%, 3 = 66%, 4 = 75%, etc.
+	SkipChance      = 20.0,  -- flat chance to skip
 	Debug           = true   -- if we should print stupid things to console.
 }
 
@@ -163,7 +163,7 @@ function EventBalance.ShouldSkipEvent_BySectorVolume(Event)
 			print(" ")
 		end
 
-		return EventBalance.ShouldSkipEvent_ByFlatChance(Event)
+		return EventBalance.ShouldSkipEvent_ByFlatChance(Event) and EventBalance.ShouldSkipEvent_ByFlatChance(Event)
 	elseif(ShipAverageVolume >= (SectorAverageVolume + EventBalance.SkipWindowFloat) + SectorAllowedDiff) then
 		if(EventBalance.Debug)
 		then
@@ -172,7 +172,7 @@ function EventBalance.ShouldSkipEvent_BySectorVolume(Event)
 			print(" ")
 		end
 
-		return EventBalance.ShouldSkipEvent_ByFlatChance(Event)
+		return EventBalance.ShouldSkipEvent_ByFlatChance(Event) and EventBalance.ShouldSkipEvent_ByFlatChance(Event)
 	end
 
 	return false
@@ -182,7 +182,7 @@ function EventBalance.ShouldSkipEvent_ByFlatChance(Event)
 -- decide if we should skip the event based on a stupid flat chance.
 
 	if(EventBalance.SkipChance > 0) then
-		return not random():getInt(1,EventBalance.SkipChance) == 1
+		return random():getInt(1,100) < EventBalance.SkipChance
 	end
 
 	return false
