@@ -29,7 +29,7 @@ EventBalance = {
 	SkipWindowFlex  = 0.75,  -- multiplier for ship count impact
 	SkipWindowFloat = 750,   -- artificially float the sector's actual average
 	SkipWindow      = 33.0,  -- percentage of sector volume ripe for attack
-	SkipChance      = 20.0,  -- flat chance to skip
+	SkipChance      = 20.0,  -- percentage flat chance to skip for no reason
 	Debug           = true   -- if we should print stupid things to console.
 }
 
