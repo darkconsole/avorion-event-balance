@@ -191,7 +191,7 @@ function EventBalance.ShouldSkipEvent_ByFlatChance(Event, FactorVolume)
 	end
 
 	if(EventBalance.SkipChance > 0) then
-		return not random():getInt(1,100) < SkipChance
+		return random():getInt(1,100) > SkipChance
 	end
 
 	return false
