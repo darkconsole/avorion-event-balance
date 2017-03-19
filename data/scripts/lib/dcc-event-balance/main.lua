@@ -24,13 +24,14 @@
 --------------------------------------------------------------------------------
 
 EventBalance = {
-	PauseMultiplier = 8,     -- mutiplier for delay between events
-	SkipWindowCap   = 10,    -- max ships before we stop curving chance
-	SkipWindowFlex  = 0.75,  -- multiplier for ship count impact
-	SkipWindowFloat = 750,   -- artificially float the sector's actual average
-	SkipWindow      = 33.0,  -- percentage of sector volume ripe for attack
-	SkipChance      = 20.0,  -- percentage flat chance to skip for no reason
-	Debug           = true   -- if we should print stupid things to console.
+	PauseMultiplier   = 8,     -- mutiplier for delay between events
+	SkipWindowCap     = 10,    -- max ships before we stop curving chance
+	SkipWindowFlex    = 0.75,  -- multiplier for ship count impact
+	SkipWindowFloat   = 750,   -- artificially float the sector's actual average
+	SkipWindow        = 33.0,  -- percentage of sector volume ripe for attack
+	SkipChance        = 20.0,  -- percentage flat chance to allow event
+	SkipChanceVolume  = 10.0,  -- percentage flat chance, when for volume
+	Debug             = true   -- if we should print stupid things to console.
 }
 
 --------------------------------------------------------------------------------
@@ -125,7 +126,7 @@ function EventBalance.ShouldSkipEvent(Event)
 		return true
 	end
 
-	if(EventBalance.ShouldSkipEvent_ByFlatChance(Event) == true) then
+	if(EventBalance.ShouldSkipEvent_ByFlatChance(Event,false) == true) then
 		return true
 	end
 
@@ -163,7 +164,7 @@ function EventBalance.ShouldSkipEvent_BySectorVolume(Event)
 			print(" ")
 		end
 
-		return EventBalance.ShouldSkipEvent_ByFlatChance(Event) and EventBalance.ShouldSkipEvent_ByFlatChance(Event)
+		return EventBalance.ShouldSkipEvent_ByFlatChance(Event,true)
 	elseif(ShipAverageVolume >= (SectorAverageVolume + EventBalance.SkipWindowFloat) + SectorAllowedDiff) then
 		if(EventBalance.Debug)
 		then
@@ -172,17 +173,25 @@ function EventBalance.ShouldSkipEvent_BySectorVolume(Event)
 			print(" ")
 		end
 
-		return EventBalance.ShouldSkipEvent_ByFlatChance(Event) and EventBalance.ShouldSkipEvent_ByFlatChance(Event)
+		return EventBalance.ShouldSkipEvent_ByFlatChance(Event,true)
 	end
 
 	return false
 end
 
-function EventBalance.ShouldSkipEvent_ByFlatChance(Event)
+function EventBalance.ShouldSkipEvent_ByFlatChance(Event, FactorVolume)
 -- decide if we should skip the event based on a stupid flat chance.
 
+	local SkipChance
+
+	if(FactorVolume) then
+		SkipChance = EventBalance.SkipChanceVolume
+	else
+		SkipChance = EventBalance.SkipChance
+	end
+
 	if(EventBalance.SkipChance > 0) then
-		return random():getInt(1,100) < EventBalance.SkipChance
+		return not random():getInt(1,100) < SkipChance
 	end
 
 	return false
