@@ -81,7 +81,7 @@ function updateServer(timeStep)
 
                 -- <dcc title="determine if event should be skipped">
                 if EventBalance.ShouldSkipEvent(event) then
-                    print("event `" .. event.script .. "` skipped")
+                    print("[EB] event `" .. event.script .. "` skipped")
                     event.time = event.schedule
                     return
                 end

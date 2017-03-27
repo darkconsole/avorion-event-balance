@@ -1,5 +1,5 @@
 --- ../avorion-0.11.0.7844/data/scripts/player/eventscheduler.lua	2017-03-02 20:37:56.714796900 -0600
-+++ ../avorion-event-balance/data/scripts/player/eventscheduler.lua	2017-03-27 15:03:12.089190100 -0500
++++ ../avorion-event-balance/data/scripts/player/eventscheduler.lua	2017-03-27 15:07:55.050534200 -0500
 @@ -5,6 +5,10 @@
  require ("randomext")
  require ("utility")
@@ -43,7 +43,7 @@
 +
 +                -- <dcc title="determine if event should be skipped">
 +                if EventBalance.ShouldSkipEvent(event) then
-+                    print("event `" .. event.script .. "` skipped")
++                    print("[EB] event `" .. event.script .. "` skipped")
 +                    event.time = event.schedule
 +                    return
 +                end
