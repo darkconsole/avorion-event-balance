@@ -1,6 +1,6 @@
 # Avorion - Event Balancer
 
-* Tested On 0.11
+> *Tested On 0.11.0.7844*
 
 this mod attempts to simulate the brashness of the attackers that randomly
 come to fuck your shit up while you play. space is a very large very sparely
@@ -43,7 +43,7 @@ something good here.
 
 **On the large side...**
 
->If a sector has some big shit in it, it may be too well defended to attack.
+> *If a sector has some big shit in it, it may be too well defended to attack.*
 
 * If you have a fleet of frigates, a battlestar, etc, you will almost surely
 not have to fight pirates. You would murder them there is no profit in death.
