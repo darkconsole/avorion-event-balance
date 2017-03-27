@@ -1,5 +1,5 @@
---- ../avorion-0.10.5/data/scripts/player/eventscheduler.lua	2017-03-02 20:37:56.714796900 -0600
-+++ ../avorion-event-balance/data/scripts/player/eventscheduler.lua	2017-03-15 15:26:05.000000000 -0500
+--- ../avorion-0.11.0.7844/data/scripts/player/eventscheduler.lua	2017-03-02 20:37:56.714796900 -0600
++++ ../avorion-event-balance/data/scripts/player/eventscheduler.lua	2017-03-27 15:03:12.089190100 -0500
 @@ -5,6 +5,10 @@
  require ("randomext")
  require ("utility")
@@ -23,15 +23,7 @@
  local pauseTime = pause
  
  function initialize()
-@@ -31,7 +38,6 @@
-     end
- 
-     print ("player events roughly every " .. round((1 / frequency + pause) / 60, 2) .. " minutes")
--
- end
- 
- function getUpdateInterval()
-@@ -50,8 +56,10 @@
+@@ -50,8 +57,10 @@
          if p.index < player.index then return end
      end
  
@@ -44,7 +36,7 @@
  
      if pauseTime > 0 then
          pauseTime = pauseTime - timeStep
-@@ -69,6 +77,15 @@
+@@ -69,6 +78,15 @@
  
              local position = length(vec2(Sector():getCoordinates()))
              if position >= from and position <= to then

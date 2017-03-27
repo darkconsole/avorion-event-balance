@@ -38,6 +38,7 @@ function initialize()
     end
 
     print ("player events roughly every " .. round((1 / frequency + pause) / 60, 2) .. " minutes")
+
 end
 
 function getUpdateInterval()
