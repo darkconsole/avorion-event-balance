@@ -1,5 +1,7 @@
 # Avorion - Event Balancer
 
+* Tested On 0.11
+
 this mod attempts to simulate the brashness of the attackers that randomly
 come to fuck your shit up while you play. space is a very large very sparely
 populated thing yet pirates still find you every 7 minutes like clockwork...
