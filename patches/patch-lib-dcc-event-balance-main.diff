@@ -1,5 +1,5 @@
---- ../avorion-0.10.5/data/scripts/lib/dcc-event-balance/main.lua	1969-12-31 18:00:00.000000000 -0600
-+++ ../avorion-event-balance/data/scripts/lib/dcc-event-balance/main.lua	2017-03-19 16:05:02.325883600 -0500
+--- ../avorion-0.11.0.7844/data/scripts/lib/dcc-event-balance/main.lua	1969-12-31 18:00:00.000000000 -0600
++++ ../avorion-event-balance/data/scripts/lib/dcc-event-balance/main.lua	2017-03-26 20:36:24.834000100 -0500
 @@ -0,0 +1,198 @@
 +--------------------------------------------------------------------------------
 +-- EVENT BALANCING LIB ---------------------------------------------------------
@@ -30,11 +30,11 @@
 +	PauseMultiplier   = 8,     -- mutiplier for delay between events
 +	SkipWindowCap     = 10,    -- max ships before we stop curving chance
 +	SkipWindowFlex    = 0.75,  -- multiplier for ship count impact
-+	SkipWindowFloat   = 750,   -- artificially float the sector's actual average
++	SkipWindowFloat   = 750,   -- float the sector's expected average
 +	SkipWindow        = 33.0,  -- percentage of sector volume ripe for attack
-+	SkipChance        = 20.0,  -- percentage flat chance to allow event
-+	SkipChanceVolume  = 10.0,  -- percentage flat chance, when for volume
-+	Debug             = true   -- if we should print stupid things to console.
++	SkipChance        = 20.0,  -- percentage flat chance to ALLOW event
++	SkipChanceVolume  = 10.0,  -- percentage flat chance to ALLOW for volume
++	Debug             = true   -- if we should print stupid things to console
 +}
 +
 +--------------------------------------------------------------------------------

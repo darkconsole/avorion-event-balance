@@ -6,7 +6,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 define('ProjectRoot','..');
-define('StockDir', '/avorion-0.10.5/data/scripts');
 define('ModDir', '/avorion-event-balance/data/scripts');
 define('PatchDir', '/avorion-event-balance/patches');
 define('RemoteDir','z:\home\avorion\steamcmd\avorion\data\scripts');
