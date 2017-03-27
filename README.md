@@ -183,3 +183,15 @@ require ("dcc-event-balance/main")
 So your job then is to copy paste that line into your server file in the same
 or simliar spot depending on what other edits you already have. Go through the
 list till you get them all.
+
+# Screens from the PDF you lazy turd.
+
+![derp](https://raw.githubusercontent.com/darkconsole/avorion-event-balance/master/docs/1-basic.png)
+
+![derp](https://raw.githubusercontent.com/darkconsole/avorion-event-balance/master/docs/2-scouting.png)
+
+![derp](https://raw.githubusercontent.com/darkconsole/avorion-event-balance/master/docs/3-fleets.png)
+
+![derp](https://raw.githubusercontent.com/darkconsole/avorion-event-balance/master/docs/4-confidence.png)
+
+![derp](https://raw.githubusercontent.com/darkconsole/avorion-event-balance/master/docs/5-tweaking.png)
