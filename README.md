@@ -76,16 +76,17 @@ a delay of about 40 minutes on player events and 120 minutes on pirate events.
 
 ## SkipWindow (Re: Part II)
 
-Float, 0 to 100, Default 33. Sets the percentage of the sector's expected volume
+Float, Default 33. Sets the percentage of the sector's expected volume
 is exempt from attacking. If a sector expects an average ship size of 1500, we
 will not attack this sector if the volume averages to be less than 1005 or
-higher than 1995. (495 being 33% of 1500)
+higher than 1995 (495 being 33% of 1500).
 
 ## SkipWindowFloat (Re: Part II)
 
 Float, default 750. If players on your server are building larger you can bump
 this value up to adjust what the sector expects. This will allow you to start
-catching larger fleets if that is what your players are doing more of.
+catching larger fleets if that is what your players are doing more of. You can
+also bump it up to let smaller craft be left alone more.
 
 ## SkipWindowCap (Re: Part II)
 
@@ -102,17 +103,17 @@ make that sector 1% less likely to be attacked.
 
 ## SkipChanceVolume (Re: Part II)
 
-Even if your sector is too strong or weak to bother attacking, there is still
-a chance the pirate is drunk enough to not care. By default there is a 10%
-chance of being attacked if the volume was out of the range.
+Float, Default 10. Even if your sector is too strong or weak to bother
+attacking, there is still a chance the pirate is drunk enough to not care. By
+default there is a 10% chance of being attacked if the volume was out of the
+range.
 
 ## SkipChance (Re: Part III)
 
-Int, Default 4. This is just a flat out chance that the event will get canceled
-for no reason other than luck of the draw to simulate space not being so
-populated. Its really just the upper limit of the randomInt function so a value
-of 1 would be 100%, 2 would be 50%, 3 would be 33%, 4 would be 25%...
-
+Float, Default 20. If all the conditions passed there is a chance that the event
+just will not happen, because space is huge. A value of 20 means there is a 20%
+chance that the event will be allowed. I know its named silly, it has changed
+meaning since inception.
 
 
 # Patch Install (Not or Lightly Modded Servers)
