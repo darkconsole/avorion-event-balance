@@ -27,11 +27,11 @@ EventBalance = {
 	PauseMultiplier   = 8,     -- mutiplier for delay between events
 	SkipWindowCap     = 10,    -- max ships before we stop curving chance
 	SkipWindowFlex    = 0.75,  -- multiplier for ship count impact
-	SkipWindowFloat   = 750,   -- artificially float the sector's actual average
+	SkipWindowFloat   = 750,   -- float the sector's expected average
 	SkipWindow        = 33.0,  -- percentage of sector volume ripe for attack
-	SkipChance        = 20.0,  -- percentage flat chance to allow event
-	SkipChanceVolume  = 10.0,  -- percentage flat chance, when for volume
-	Debug             = true   -- if we should print stupid things to console.
+	SkipChance        = 20.0,  -- percentage flat chance to ALLOW event
+	SkipChanceVolume  = 10.0,  -- percentage flat chance to ALLOW for volume
+	Debug             = true   -- if we should print stupid things to console
 }
 
 --------------------------------------------------------------------------------

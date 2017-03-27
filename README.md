@@ -4,6 +4,9 @@ this mod attempts to simulate the brashness of the attackers that randomly
 come to fuck your shit up while you play. space is a very large very sparely
 populated thing yet pirates still find you every 7 minutes like clockwork...
 
+SERVER ADMINS: I highly suggest you consume the PDF in the docs directory to
+understand the best way to tweak the values for your server.
+
 ## Part I: Simulate space being vast...
 
 By default player events tick roughly every 7 minutes and sector based pirate
@@ -76,6 +79,12 @@ is exempt from attacking. If a sector expects an average ship size of 1500, we
 will not attack this sector if the volume averages to be less than 1005 or
 higher than 1995. (495 being 33% of 1500)
 
+## SkipWindowFloat (Re: Part II)
+
+Float, default 750. If players on your server are building larger you can bump
+this value up to adjust what the sector expects. This will allow you to start
+catching larger fleets if that is what your players are doing more of.
+
 ## SkipWindowCap (Re: Part II)
 
 Integer, Default 10. The more ships that are in the sector the narrower the
@@ -89,12 +98,19 @@ Float, Default 0.75. How much to flex the SkipWindow by, based on how many ships
 are in the sector. With a value of 1.0 for every ship in the sector we would
 make that sector 1% less likely to be attacked.
 
+## SkipChanceVolume (Re: Part II)
+
+Even if your sector is too strong or weak to bother attacking, there is still
+a chance the pirate is drunk enough to not care. By default there is a 10%
+chance of being attacked if the volume was out of the range.
+
 ## SkipChance (Re: Part III)
 
 Int, Default 4. This is just a flat out chance that the event will get canceled
 for no reason other than luck of the draw to simulate space not being so
 populated. Its really just the upper limit of the randomInt function so a value
 of 1 would be 100%, 2 would be 50%, 3 would be 33%, 4 would be 25%...
+
 
 
 # Patch Install (Not or Lightly Modded Servers)
