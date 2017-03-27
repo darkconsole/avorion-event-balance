@@ -8,7 +8,7 @@ require ("randomext")
 require ("stringutility")
 
 -- <dcc title="require event balancer">
-require ("dcc-event-balance/main")
+require("dcc-event-balance/main")
 -- </dcc>
 
 local PirateGenerator = require ("pirategenerator")
@@ -42,10 +42,16 @@ function initialize()
         return
     end
 
+    if Sector():getValue("neutral_zone") then
+        print ("No pirate attacks in neutral zones.")
+        terminate()
+        return
+    end
+
     -- <dcc title="determine if the event should be skipped">
-    if EventBalance.ShouldSkipEvent({script="piratesbeingfuckingannoying"}) then
-        print("pirate event skipped")
-	terminate()
+    if EventBalance.ShouldSkipEvent({script="pirates-being-annoying"}) then
+        print("[EB] pirate event skipped")
+        terminate()
         return
     end
     -- </dcc>
@@ -165,7 +171,7 @@ function initialize()
 end
 
 function getUpdateInterval()
-    return 15 * EventBalance.PauseMultiplier
+    return 15
 end
 
 function update(timeStep)

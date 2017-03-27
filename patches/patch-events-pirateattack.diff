@@ -1,25 +1,25 @@
---- ../avorion-0.10.5/data/scripts/events/pirateattack.lua	2017-03-02 20:37:56.235298500 -0600
-+++ ../avorion-event-balance/data/scripts/events/pirateattack.lua	2017-03-11 10:52:36.000000000 -0600
+--- ../avorion-0.11.0.7844/data/scripts/events/pirateattack.lua	2017-03-19 16:55:36.660981300 -0500
++++ ../avorion-event-balance/data/scripts/events/pirateattack.lua	2017-03-27 14:55:12.286408800 -0500
 @@ -6,6 +6,11 @@
  require ("galaxy")
  require ("randomext")
  require ("stringutility")
 +
 +-- <dcc title="require event balancer">
-+require ("dcc-event-balance/main")
++require("dcc-event-balance/main")
 +-- </dcc>
 +
  local PirateGenerator = require ("pirategenerator")
  local UpgradeGenerator = require ("upgradegenerator")
  local TurretGenerator = require ("turretgenerator")
-@@ -37,6 +42,14 @@
+@@ -43,6 +48,14 @@
          return
      end
  
 +    -- <dcc title="determine if the event should be skipped">
-+    if EventBalance.ShouldSkipEvent({script="piratesbeingfuckingannoying"}) then
-+        print("pirate event skipped")
-+	terminate()
++    if EventBalance.ShouldSkipEvent({script="pirates-being-annoying"}) then
++        print("[EB] pirate event skipped")
++        terminate()
 +        return
 +    end
 +    -- </dcc>
@@ -27,12 +27,3 @@
      ships = {}
      participants = {}
      reward = 0
-@@ -152,7 +165,7 @@
- end
- 
- function getUpdateInterval()
--    return 15
-+    return 15 * EventBalance.PauseMultiplier
- end
- 
- function update(timeStep)
