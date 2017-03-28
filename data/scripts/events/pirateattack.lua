@@ -171,7 +171,9 @@ function initialize()
 end
 
 function getUpdateInterval()
-    return 15
+    -- <dcc title="increase event delay">
+    return 15 * EventBalance.PauseMultiplier
+    -- </dcc>
 end
 
 function update(timeStep)

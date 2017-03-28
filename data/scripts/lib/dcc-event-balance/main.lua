@@ -18,6 +18,7 @@
 -- events\pirateattack.lua
 -- + require event balancer
 -- + determine if event should be skipped
+-- + increase event delay
 
 --------------------------------------------------------------------------------
 -- MOD CONFIG ------------------------------------------------------------------

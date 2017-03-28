@@ -1,6 +1,6 @@
 --- ../avorion-0.11.0.7844/data/scripts/lib/dcc-event-balance/main.lua	1969-12-31 18:00:00.000000000 -0600
-+++ ../avorion-event-balance/data/scripts/lib/dcc-event-balance/main.lua	2017-03-26 20:36:24.834000100 -0500
-@@ -0,0 +1,198 @@
++++ ../avorion-event-balance/data/scripts/lib/dcc-event-balance/main.lua	2017-03-28 12:25:36.637724200 -0500
+@@ -0,0 +1,199 @@
 +--------------------------------------------------------------------------------
 +-- EVENT BALANCING LIB ---------------------------------------------------------
 +--------------------------------------------------------------------------------
@@ -21,6 +21,7 @@
 +-- events\pirateattack.lua
 +-- + require event balancer
 +-- + determine if event should be skipped
++-- + increase event delay
 +
 +--------------------------------------------------------------------------------
 +-- MOD CONFIG ------------------------------------------------------------------

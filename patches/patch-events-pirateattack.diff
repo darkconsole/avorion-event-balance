@@ -1,5 +1,5 @@
 --- ../avorion-0.11.0.7844/data/scripts/events/pirateattack.lua	2017-03-19 16:55:36.660981300 -0500
-+++ ../avorion-event-balance/data/scripts/events/pirateattack.lua	2017-03-27 14:55:12.286408800 -0500
++++ ../avorion-event-balance/data/scripts/events/pirateattack.lua	2017-03-28 12:26:34.714666700 -0500
 @@ -6,6 +6,11 @@
  require ("galaxy")
  require ("randomext")
@@ -27,3 +27,14 @@
      ships = {}
      participants = {}
      reward = 0
+@@ -158,7 +171,9 @@
+ end
+ 
+ function getUpdateInterval()
+-    return 15
++    -- <dcc title="increase event delay">
++    return 15 * EventBalance.PauseMultiplier
++    -- </dcc>
+ end
+ 
+ function update(timeStep)
