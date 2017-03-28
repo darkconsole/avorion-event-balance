@@ -9,16 +9,20 @@
 -- STOCK FILE MODIFICATIONS ----------------------------------------------------
 --------------------------------------------------------------------------------
 
+-- + means section needs to be added added.
+-- - means section needs to be removed.
+-- ~ means section replaces some stock code.
+
 -- player\eventscheduler.lua
 -- + require event balancer
--- + increase event delay
--- + disable multiple players speeding up events
+-- ~ increase event delay
+-- ~ disable multiple players speeding up events
 -- + determine if event should be skipped
 
 -- events\pirateattack.lua
 -- + require event balancer
 -- + determine if event should be skipped
--- + increase event delay
+-- ~ increase event delay
 
 --------------------------------------------------------------------------------
 -- MOD CONFIG ------------------------------------------------------------------
