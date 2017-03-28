@@ -9,6 +9,13 @@ populated thing yet pirates still find you every 7 minutes like clockwork...
 SERVER ADMINS: I highly suggest you consume the PDF in the docs directory to
 understand the best way to tweak the values for your server.
 
+INSTALLATION: You can either install this mod manually by copying the files in
+or, if you already have some mods editing these files, you can use the patches
+to try and and fuzz them in magically. If your server is HEAVILY modded you may
+need to manually mod it. There are sections in this readme for this.
+
+# How It Works
+
 ## Part I: Simulate space being vast...
 
 By default player events tick roughly every 7 minutes and sector based pirate
@@ -71,8 +78,9 @@ All the config options can be found in the `dcc-event-balance/main.lua` file.
 
 ## PauseMultiplier (Re: Part I)
 
-Float, Default 8. This value will adjust the delay between events. Default value of 8 puts
-a delay of about 40 minutes on player events and 120 minutes on pirate events.
+Float, Default 8. This value will adjust the delay between events. Default value
+of 8 puts a delay of about 40 minutes on player events and 120 minutes on pirate
+events.
 
 ## SkipWindow (Re: Part II)
 
@@ -119,28 +127,28 @@ meaning since inception.
 # Patch Install (Not or Lightly Modded Servers)
 
 If your source is clean enough you should be able to patch the game with the
-diff files. You do this from a command window. Here is an example of game
-installation, adjust the situation to fit your install paths. For this to work
-you will need the common GNU tools installed on Windows. On Linux it will just
-work.
+diff files.
 
-* Server is installed to `C:\games\avorion`
-* Mod is extracted to `C:\games\avorion-event-balance
+Assuming the server is installed to `/home/avorion/steamcmd/avorion`
 
-Knowing this, we can then do...
+* `cd /home/avorion/steamcmd`
+* `git clone https://github.com/darkconsole/avorion-event-balance`
 
-* Command terminal window with current directory of `C:\games\avorion`
-* `cat ..\avorion-event-balance\patches\* | patch -p2`
+We now have `avorion` and `avorion-event-balance` sitting side by side. The
+scripts I have included to try and make your life easier depend on this.
+
+* `cd /home/avorion/steamcmd/avorion`
+* `sh ../avorion-event-balance/tools/patch-install-test.sh`
+
+This will tell you if the patches will work for you or not. If it looks good
+then do it for real.
+
+* `sh ../avorion-event-balance/tools/patch-install.sh`
 
 ```
-PS C:\games\avorion-server> cat ..\avorion-event-balance\patches\* | patch -p2
-
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file 'data\scripts\events\pirateattack.lua'
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file data/scripts/lib/dcc-event-balance/main.lua
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file 'data\scripts\player\eventscheduler.lua'
+patching file 'data/scripts/events/pirateattack.lua'
+patching file 'data/scripts/lib/dcc-event-balance/main.lua'
+patching file 'data/scripts/player/eventscheduler.lua'
 ```
 
 # Patch Update (Not or Lightly Modded Servers)
