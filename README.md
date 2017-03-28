@@ -14,6 +14,8 @@ or, if you already have some mods editing these files, you can use the patches
 to try and and fuzz them in magically. If your server is HEAVILY modded you may
 need to manually mod it. There are sections in this readme for this.
 
+
+
 # How It Works
 
 ## Part I: Simulate space being vast...
@@ -72,6 +74,8 @@ all volume to do so near the center without retrofits.
 There is a flat out 75% chance (by default) that if an event *was* going to
 happen, that it will not, because, again, space is fucking huge.
 
+
+
 # Configuration Options
 
 All the config options can be found in the `dcc-event-balance/main.lua` file.
@@ -124,50 +128,82 @@ chance that the event will be allowed. I know its named silly, it has changed
 meaning since inception.
 
 
+
 # Patch Install (Not or Lightly Modded Servers)
 
 If your source is clean enough you should be able to patch the game with the
 diff files.
 
-Assuming the server is installed to `/home/avorion/steamcmd/avorion`
+> Example Server Install Path: `/home/avorion/steamcmd/avorion-server`
 
 * `cd /home/avorion/steamcmd`
 * `git clone https://github.com/darkconsole/avorion-event-balance`
-
-We now have `avorion` and `avorion-event-balance` sitting side by side. The
-scripts I have included to try and make your life easier depend on this.
-
-* `cd /home/avorion/steamcmd/avorion`
+* `cd avorion-server`
 * `sh ../avorion-event-balance/tools/patch-install-test.sh`
 
-This will tell you if the patches will work for you or not. If it looks good
-then do it for real.
+```
+checking file data/scripts/events/pirateattack.lua
+checking file data/scripts/lib/dcc-event-balance/main.lua
+checking file data/scripts/player/eventscheduler.lua
+```
+
+Depending on how modded out your server is it may ask you questions. As long as
+there are no "Hunks Failed" then you can patch for real.
 
 * `sh ../avorion-event-balance/tools/patch-install.sh`
 
 ```
-patching file 'data/scripts/events/pirateattack.lua'
-patching file 'data/scripts/lib/dcc-event-balance/main.lua'
-patching file 'data/scripts/player/eventscheduler.lua'
+patching file data/scripts/events/pirateattack.lua
+patching file data/scripts/lib/dcc-event-balance/main.lua
+patching file data/scripts/player/eventscheduler.lua
 ```
+
+
 
 # Patch Update (Not or Lightly Modded Servers)
 
-If you are updating this mod, first, remove it, before extracting and installing
-the new copy.
+If you are updating this mod after successfully patching it previously you must
+remove the patches first, grab the updated source, then repatch. We are assuming
+you installed using the Patch Install method above, first.
+
+> Example Server Install Path: `/home/avorion/steamcmd/avorion-server`
+
+> Example Mod Path: `/home/avorion/steamcmd/avorion-event-balance`
+
+* `cd /home/avorion/steamcmd/avorion-server`
+* `sh ../avorion-event-balance/tools/patch-remove-test.sh`
 
 ```
-PS C:\games\avorion-server> cat ..\avorion-event-balance\patches\* | patch -p2 -R
+checking file data/scripts/events/pirateattack.lua
+checking file data/scripts/lib/dcc-event-balance/main.lua
+checking file data/scripts/player/eventscheduler.lua
+```
 
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file 'data\scripts\events\pirateattack.lua'
-(Stripping trailing CRs from patch; use --binary to disable.)
+Depending on how modded out your server is it may ask you questions. As long as
+there are no "Hunks Failed" then you can reverse the patches for real.
+
+* `sh ../avorion-event-balance/tools/patch-remove.sh`
+
+```
+patching file data/scripts/events/pirateattack.lua
 patching file data/scripts/lib/dcc-event-balance/main.lua
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file 'data\scripts\player\eventscheduler.lua'
+patching file data/scripts/player/eventscheduler.lua
 ```
 
-Now you can extract the new copy and do the normal Patch Install section.
+I know it sounds like it patched, but it says the same thing in both directions.
+Whatever, I didn't write `patch` lol.
+
+Now you can grab updated source.
+
+* `cd ../avorion-event-balance`
+* `git pull`
+
+And patch it just like before.
+
+* `cd ../avorion-server`
+* `sh ../avorion-event-balance/tools/patch-install-test.sh`
+* `sh ../avorion-event-balance/tools/patch-install.sh`
+
 
 # Manual Install (Heavily Modded Servers)
 
@@ -191,11 +227,11 @@ require ("dcc-event-balance/main")
 -- </dcc>
 ```
 
-So your job then is to copy paste that line into your server file in the same
+So your job then is to copy paste those lines into your server file in the same
 or simliar spot depending on what other edits you already have. Go through the
 list till you get them all.
 
-# Screens from the PDF you lazy turd.
+# Tuning Guide
 
 ![derp](https://raw.githubusercontent.com/darkconsole/avorion-event-balance/master/docs/1-basic.png)
 
