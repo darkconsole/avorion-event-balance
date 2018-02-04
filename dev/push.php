@@ -8,7 +8,7 @@
 define('ProjectRoot','..');
 define('ModDir', '/avorion-event-balance/data/scripts');
 define('PatchDir', '/avorion-event-balance/patches');
-define('RemoteDir','z:\home\avorion\steamcmd\avorion\data\scripts');
+define('RemoteDir','D:\Games\avorion\data\scripts');
 
 define('Files',[
 	'/lib/dcc-event-balance/main.lua' => '/patch-lib-dcc-event-balance-main.diff',

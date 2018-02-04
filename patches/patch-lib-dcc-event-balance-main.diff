@@ -1,4 +1,4 @@
---- ../avorion-0.11.0.7844/data/scripts/lib/dcc-event-balance/main.lua	1969-12-31 18:00:00.000000000 -0600
+--- ../avorion-stock/data/scripts/lib/dcc-event-balance/main.lua	1969-12-31 18:00:00.000000000 -0600
 +++ ../avorion-event-balance/data/scripts/lib/dcc-event-balance/main.lua	2017-03-28 12:33:47.640873800 -0500
 @@ -0,0 +1,203 @@
 +--------------------------------------------------------------------------------
