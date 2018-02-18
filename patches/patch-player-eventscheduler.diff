@@ -1,4 +1,4 @@
---- ../avorion-stock/data/scripts/player/eventscheduler.lua	2018-02-04 15:44:59.347081700 -0600
+--- ../avorion-stock/data/scripts/player/eventscheduler.lua	2018-02-17 11:55:22.365840400 -0600
 +++ ../avorion-event-balance/data/scripts/player/eventscheduler.lua	2017-03-27 15:07:55.050534200 -0500
 @@ -5,12 +5,15 @@
  require ("randomext")

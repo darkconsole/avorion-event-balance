@@ -1,4 +1,4 @@
---- ../avorion-stock/data/scripts/events/pirateattack.lua	2018-02-04 15:44:58.113606300 -0600
+--- ../avorion-stock/data/scripts/events/pirateattack.lua	2018-02-17 11:55:16.146219100 -0600
 +++ ../avorion-event-balance/data/scripts/events/pirateattack.lua	2017-03-28 12:26:34.714666700 -0500
 @@ -6,8 +6,12 @@
  require ("galaxy")
@@ -226,7 +226,7 @@
  
      local ship = Entity(shipIndex)
      local damagers = {ship:getDamageContributorPlayers()}
-@@ -171,29 +206,28 @@
+@@ -171,23 +206,22 @@
  
      -- if they're all destroyed, the event ends
      if tablelength(ships) == 0 then
@@ -259,10 +259,3 @@
          -- give payment to players who participated
          for i, v in pairs(participants) do
              local player = Player(i)
- 
-             player:sendChatMessage(faction.name, 0, getRandomEntry(messages))
--            player:receive("Received %1% credits for defeating a pirate attack."%_T, reward)
-+            player:receive(reward)
-             Galaxy():changeFactionRelations(player, faction, reputation)
- 
-             local x, y = Sector():getCoordinates()
