@@ -6,6 +6,7 @@ package.path = package.path .. ";data/scripts/?.lua"
 require ("galaxy")
 require ("randomext")
 require ("stringutility")
+require("player")
 
 -- <dcc title="require event balancer">
 require("dcc-event-balance/main")
@@ -40,16 +41,17 @@ function PirateAttack.restore(data)
 end
 
 function PirateAttack.initialize()
+    local sector = Sector()
 
     -- no pirate attacks at the very edge of the galaxy
-    local x, y = Sector():getCoordinates()
+    local x, y = sector:getCoordinates()
     if length(vec2(x, y)) > 560 then
         print ("Too far out for pirate attacks.")
         terminate()
         return
     end
 
-    if Sector():getValue("neutral_zone") then
+    if sector:getValue("neutral_zone") then
         print ("No pirate attacks in neutral zones.")
         terminate()
         return
@@ -68,14 +70,14 @@ function PirateAttack.initialize()
     reward = 0
     reputation = 0
 
-    local scaling = Sector().numPlayers
+    local scaling = sector.numPlayers
     if scaling == 0 then
         terminate()
         return
     end
 
     if scaling == 1 then
-        local player = Sector():getPlayers()
+        local player = sector:getPlayers()
         local hx, hy = player:getHomeSectorCoordinates()
         if hx == x and hy == y and player.playtime < 30 * 60 then
             print ("Player's playtime is below 30 minutes (%is), cancelling pirate attack.", player.playtime)
@@ -130,9 +132,10 @@ function PirateAttack.initialize()
     generator:endBatch()
 
     reputation = reward * 2000
-    reward = reward * 4500 * Balancing_GetSectorRichnessFactor(Sector():getCoordinates())
+    reward = reward * 4500 * Balancing_GetSectorRichnessFactor(sector:getCoordinates())
 
-    Sector():broadcastChatMessage("Server"%_t, 2, "Pirates are attacking the sector!"%_t)
+    sector:broadcastChatMessage("Server"%_t, 2, "Pirates are attacking the sector!"%_t)
+    AlertAbsentPlayers(2, "Pirates are attacking sector \\s(%s:%s)!"%_t, sector:getCoordinates())
 end
 
 function PirateAttack.getUpdateInterval()

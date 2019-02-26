@@ -1,9 +1,9 @@
---- ../avorion-stock/data/scripts/events/pirateattack.lua	2019-02-10 13:06:21.603399100 -0600
-+++ ../avorion-event-balance/data/scripts/events/pirateattack.lua	2019-02-26 04:53:30.417212100 -0600
-@@ -6,6 +6,11 @@
- require ("galaxy")
+--- ../avorion-stock/data/scripts/events/pirateattack.lua	2019-02-26 13:08:19.573710500 -0600
++++ ../avorion-event-balance/data/scripts/events/pirateattack.lua	2019-02-26 13:31:17.209229400 -0600
+@@ -7,6 +7,11 @@
  require ("randomext")
  require ("stringutility")
+ require("player")
 +
 +-- <dcc title="require event balancer">
 +require("dcc-event-balance/main")
@@ -12,7 +12,7 @@
  local Placer = require("placer")
  local AsyncPirateGenerator = require ("asyncpirategenerator")
  local UpgradeGenerator = require ("upgradegenerator")
-@@ -50,6 +55,14 @@
+@@ -52,6 +57,14 @@
          return
      end
  
@@ -27,7 +27,7 @@
      ships = {}
      participants = {}
      reward = 0
-@@ -123,7 +136,9 @@
+@@ -126,7 +139,9 @@
  end
  
  function PirateAttack.getUpdateInterval()
