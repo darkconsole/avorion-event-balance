@@ -1,48 +1,18 @@
---- ../avorion-stock/data/scripts/events/pirateattack.lua	2018-02-17 11:55:16.146219100 -0600
-+++ ../avorion-event-balance/data/scripts/events/pirateattack.lua	2017-03-28 12:26:34.714666700 -0500
-@@ -6,8 +6,12 @@
+--- ../avorion-stock/data/scripts/events/pirateattack.lua	2019-02-10 13:06:21.603399100 -0600
++++ ../avorion-event-balance/data/scripts/events/pirateattack.lua	2019-02-26 04:53:30.417212100 -0600
+@@ -6,6 +6,11 @@
  require ("galaxy")
  require ("randomext")
  require ("stringutility")
--local Placer = require("placer")
--local AsyncPirateGenerator = require ("asyncpirategenerator")
 +
 +-- <dcc title="require event balancer">
 +require("dcc-event-balance/main")
 +-- </dcc>
 +
-+local PirateGenerator = require ("pirategenerator")
+ local Placer = require("placer")
+ local AsyncPirateGenerator = require ("asyncpirategenerator")
  local UpgradeGenerator = require ("upgradegenerator")
- local TurretGenerator = require ("turretgenerator")
- 
-@@ -18,23 +22,17 @@
- 
- local participants = {}
- 
---- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
---- namespace PirateAttack
--PirateAttack = {}
--PirateAttack.attackersGenerated = false
--
--
--function PirateAttack.secure()
-+function secure()
-     return {reward = reward, reputation = reputation, ships = ships}
- end
- 
--function PirateAttack.restore(data)
-+function restore(data)
-     ships = data.ships
-     reputation = data.reputation
-     reward = data.reward
- end
- 
--function PirateAttack.initialize()
-+function initialize()
- 
-     -- no pirate attacks at the very edge of the galaxy
-     local x, y = Sector():getCoordinates()
-@@ -50,6 +48,14 @@
+@@ -50,6 +55,14 @@
          return
      end
  
@@ -57,205 +27,14 @@
      ships = {}
      participants = {}
      reward = 0
-@@ -77,44 +83,86 @@
-     local right = normalize(cross(dir, up))
-     local pos = dir * 1000
- 
--    local attackType = getInt(1, 4)
-+    local attackers = getInt(1, 4)
-+
-+    if attackers == 1 then
-+        reward = 2.0
- 
--    local distance = 50
-+        local pirate = PirateGenerator.createScaledRaider(MatrixLookUpPosition(-dir, up, pos))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
- 
--    local generator = AsyncPirateGenerator(PirateAttack, PirateAttack.onPiratesGenerated)
--    generator:startBatch()
-+        local distance = pirate:getBoundingSphere().radius * 2 + 20
- 
--    if attackType == 1 then
--        reward = 2.0
-+        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
- 
--        generator:createScaledRaider(MatrixLookUpPosition(-dir, up, pos))
--        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
--        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-+        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
- 
--    elseif attackType == 2 then
-+
-+    elseif attackers == 2 then
-         reward = 1.5
- 
--        generator:createScaledPirate(MatrixLookUpPosition(-dir, up, pos))
--        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
--        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-+        local pirate = PirateGenerator.createScaledPirate(MatrixLookUpPosition(-dir, up, pos))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-+
-+        local distance = pirate:getBoundingSphere().radius * 2 + 20
-+
-+        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
- 
--    elseif attackType == 3 then
-+        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-+
-+    elseif attackers == 3 then
-         reward = 1.5
- 
--        generator:createScaledPirate(MatrixLookUpPosition(-dir, up, pos))
--        generator:createScaledPirate(MatrixLookUpPosition(-dir, up, pos + right * distance))
--        generator:createScaledPirate(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-+        local pirate = PirateGenerator.createScaledPirate(MatrixLookUpPosition(-dir, up, pos))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-+
-+        local distance = pirate:getBoundingSphere().radius * 2 + 20
-+
-+        local pirate = PirateGenerator.createScaledPirate(MatrixLookUpPosition(-dir, up, pos + right * distance))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-+
-+        local pirate = PirateGenerator.createScaledPirate(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-+
-     else
-         reward = 1.0
- 
--        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos))
--        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
--        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
--        generator:createScaledOutlaw(MatrixLookUpPosition(-dir, up, pos + right * -distance * 2.0))
--        generator:createScaledOutlaw(MatrixLookUpPosition(-dir, up, pos + right * distance * 2.0))
--    end
-+        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-+
-+        local distance = pirate:getBoundingSphere().radius * 2 + 20
-+
-+        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-+
-+        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-+
-+        local pirate = PirateGenerator.createScaledOutlaw(MatrixLookUpPosition(-dir, up, pos + right * -distance * 2.0))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-+
-+        local pirate = PirateGenerator.createScaledOutlaw(MatrixLookUpPosition(-dir, up, pos + right * distance * 2.0))
-+        table.insert(ships, pirate.index)
-+        pirate:registerCallback("onDestroyed", "onShipDestroyed")
- 
--    generator:endBatch()
-+    end
- 
-     reputation = reward * 2000
-     reward = reward * 4500 * Balancing_GetSectorRichnessFactor(Sector():getCoordinates())
-@@ -122,46 +170,33 @@
-     Sector():broadcastChatMessage("Server"%_t, 2, "Pirates are attacking the sector!"%_t)
+@@ -123,7 +136,9 @@
  end
  
--function PirateAttack.getUpdateInterval()
+ function PirateAttack.getUpdateInterval()
 -    return 15
--end
--
--function PirateAttack.onPiratesGenerated(generated)
--
--    for _, ship in pairs(generated) do
--        ships[ship.index.string] = true
--        ship:registerCallback("onDestroyed", "onShipDestroyed")
--    end
--
--    -- resolve intersections between generated ships
--    Placer.resolveIntersections(generated)
--
--    PirateAttack.attackersGenerated = true
-+function getUpdateInterval()
 +    -- <dcc title="increase event delay">
 +    return 15 * EventBalance.PauseMultiplier
 +    -- </dcc>
  end
  
--function PirateAttack.update(timeStep)
--
--    if not PirateAttack.attackersGenerated then return end
-+function update(timeStep)
- 
-     -- check if all ships are still there
-     -- ships might have changed sector or deleted in another way, which doesn't trigger destruction callback
-     local sector = Sector()
--    for id, _ in pairs(ships) do
--        local pirate = sector:getEntity(Uuid(id))
-+    for i, entityIndex in pairs(ships) do
-+        local pirate = sector:getEntity(entityIndex)
-         if pirate == nil then
--            ships[id] = nil
-+            ships[i] = nil
-         end
-     end
- 
-     -- if not -> end event
-     if tablelength(ships) == 0 then
--        PirateAttack.endEvent()
-+        endEvent()
-     end
- end
- 
--function PirateAttack.onShipDestroyed(shipIndex)
-+function onShipDestroyed(shipIndex)
- 
--    ships[shipIndex.string] = nil
-+    ships[shipIndex] = nil
- 
-     local ship = Entity(shipIndex)
-     local damagers = {ship:getDamageContributorPlayers()}
-@@ -171,23 +206,22 @@
- 
-     -- if they're all destroyed, the event ends
-     if tablelength(ships) == 0 then
--        PirateAttack.endEvent()
-+        endEvent()
-     end
- end
- 
- 
--function PirateAttack.endEvent()
-+function endEvent()
-+
-+    local messages =
-+    {
-+        "Thank you for defeating those pirates. You have our endless gratitude."%_t,
-+        "We thank you for taking care of those ships. We transferred a reward to your account."%_t,
-+        "Thank you for taking care of those pirates. We transferred a reward to your account."%_t,
-+    }
- 
-     local faction = Galaxy():getLocalFaction(Sector():getCoordinates())
-     if faction then
--
--        local messages =
--        {
--            "Thank you for defeating those pirates. You have our endless gratitude."%_t,
--            "We thank you for taking care of those ships. We transferred a reward to your account."%_t,
--            "Thank you for taking care of those pirates. We transferred a reward to your account."%_t,
--        }
--
-         -- give payment to players who participated
-         for i, v in pairs(participants) do
-             local player = Player(i)
+ function PirateAttack.onPiratesGenerated(generated)

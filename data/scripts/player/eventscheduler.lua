@@ -13,7 +13,8 @@ local events =
 {
     {schedule = random():getInt(45, 60) * 60, script = "convoidistresssignal", arguments = {true}, to = 560},
     {schedule = random():getInt(60, 80) * 60, script = "fakedistresssignal", arguments = {true}, to = 560},
-    {schedule = random():getInt(60, 80) * 60, script = "piratehunter", to = 560},
+    {schedule = random():getInt(60, 80) * 60, script = "pirateattackstarter", to = 560},
+    {schedule = random():getInt(60, 80) * 60, script = "traderattackedbypiratesstarter", to = 560},
     {schedule = random():getInt(25, 50) * 60, script = "alienattack", arguments = {0}, minimum = 5 * 60, from = 0, to = 500},
     {schedule = random():getInt(35, 70) * 60, script = "alienattack", arguments = {1}, minimum = 25 * 60, to = 500},
     {schedule = random():getInt(60, 80) * 60, script = "alienattack", arguments = {2}, minimum = 60 * 60, to = 350},
@@ -27,7 +28,11 @@ local pause = (5 * 60) * EventBalance.PauseMultiplier
 
 local pauseTime = pause
 
-function initialize()
+-- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
+-- namespace EventScheduler
+EventScheduler = {}
+
+function EventScheduler.initialize()
     for _, event in pairs(events) do
         event.time = (event.minimum or 5 * 60) + math.random() * event.schedule
     end
@@ -41,12 +46,15 @@ function initialize()
 
 end
 
-function getUpdateInterval()
+function EventScheduler.getUpdateInterval()
     return 5
 end
 
-function updateServer(timeStep)
+function EventScheduler.updateServer(timeStep)
     local player = Player()
+
+    local x, y = Sector():getCoordinates()
+    if x == 0 and y == 0 then return end
 
     -- timeStep = timeStep * 60
 
@@ -104,7 +112,7 @@ function updateServer(timeStep)
 end
 
 
-function secure()
+function EventScheduler.secure()
     local times = {}
 
     for _, event in pairs(events) do
@@ -114,7 +122,7 @@ function secure()
     return times
 end
 
-function restore(times)
+function EventScheduler.restore(times)
     for i = 1, math.min(#times, #events) do
         events[i].time = times[i]
     end

@@ -11,7 +11,8 @@ require ("stringutility")
 require("dcc-event-balance/main")
 -- </dcc>
 
-local PirateGenerator = require ("pirategenerator")
+local Placer = require("placer")
+local AsyncPirateGenerator = require ("asyncpirategenerator")
 local UpgradeGenerator = require ("upgradegenerator")
 local TurretGenerator = require ("turretgenerator")
 
@@ -22,17 +23,23 @@ local reputation = 0
 
 local participants = {}
 
-function secure()
+-- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
+-- namespace PirateAttack
+PirateAttack = {}
+PirateAttack.attackersGenerated = false
+
+
+function PirateAttack.secure()
     return {reward = reward, reputation = reputation, ships = ships}
 end
 
-function restore(data)
+function PirateAttack.restore(data)
     ships = data.ships
     reputation = data.reputation
     reward = data.reward
 end
 
-function initialize()
+function PirateAttack.initialize()
 
     -- no pirate attacks at the very edge of the galaxy
     local x, y = Sector():getCoordinates()
@@ -83,86 +90,44 @@ function initialize()
     local right = normalize(cross(dir, up))
     local pos = dir * 1000
 
-    local attackers = getInt(1, 4)
+    local attackType = getInt(1, 4)
 
-    if attackers == 1 then
+    local distance = 50
+
+    local generator = AsyncPirateGenerator(PirateAttack, PirateAttack.onPiratesGenerated)
+    generator:startBatch()
+
+    if attackType == 1 then
         reward = 2.0
 
-        local pirate = PirateGenerator.createScaledRaider(MatrixLookUpPosition(-dir, up, pos))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
+        generator:createScaledRaider(MatrixLookUpPosition(-dir, up, pos))
+        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
+        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
 
-        local distance = pirate:getBoundingSphere().radius * 2 + 20
-
-        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
-        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
-
-    elseif attackers == 2 then
+    elseif attackType == 2 then
         reward = 1.5
 
-        local pirate = PirateGenerator.createScaledPirate(MatrixLookUpPosition(-dir, up, pos))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
+        generator:createScaledPirate(MatrixLookUpPosition(-dir, up, pos))
+        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
+        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
 
-        local distance = pirate:getBoundingSphere().radius * 2 + 20
-
-        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
-        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
-    elseif attackers == 3 then
+    elseif attackType == 3 then
         reward = 1.5
 
-        local pirate = PirateGenerator.createScaledPirate(MatrixLookUpPosition(-dir, up, pos))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
-        local distance = pirate:getBoundingSphere().radius * 2 + 20
-
-        local pirate = PirateGenerator.createScaledPirate(MatrixLookUpPosition(-dir, up, pos + right * distance))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
-        local pirate = PirateGenerator.createScaledPirate(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
+        generator:createScaledPirate(MatrixLookUpPosition(-dir, up, pos))
+        generator:createScaledPirate(MatrixLookUpPosition(-dir, up, pos + right * distance))
+        generator:createScaledPirate(MatrixLookUpPosition(-dir, up, pos + right * -distance))
     else
         reward = 1.0
 
-        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
-        local distance = pirate:getBoundingSphere().radius * 2 + 20
-
-        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
-        local pirate = PirateGenerator.createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
-        local pirate = PirateGenerator.createScaledOutlaw(MatrixLookUpPosition(-dir, up, pos + right * -distance * 2.0))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
-        local pirate = PirateGenerator.createScaledOutlaw(MatrixLookUpPosition(-dir, up, pos + right * distance * 2.0))
-        table.insert(ships, pirate.index)
-        pirate:registerCallback("onDestroyed", "onShipDestroyed")
-
+        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos))
+        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * distance))
+        generator:createScaledBandit(MatrixLookUpPosition(-dir, up, pos + right * -distance))
+        generator:createScaledOutlaw(MatrixLookUpPosition(-dir, up, pos + right * -distance * 2.0))
+        generator:createScaledOutlaw(MatrixLookUpPosition(-dir, up, pos + right * distance * 2.0))
     end
+
+    generator:endBatch()
 
     reputation = reward * 2000
     reward = reward * 4500 * Balancing_GetSectorRichnessFactor(Sector():getCoordinates())
@@ -170,65 +135,85 @@ function initialize()
     Sector():broadcastChatMessage("Server"%_t, 2, "Pirates are attacking the sector!"%_t)
 end
 
-function getUpdateInterval()
+function PirateAttack.getUpdateInterval()
     -- <dcc title="increase event delay">
     return 15 * EventBalance.PauseMultiplier
     -- </dcc>
 end
 
-function update(timeStep)
+function PirateAttack.onPiratesGenerated(generated)
+
+    for _, ship in pairs(generated) do
+        if valid(ship) then -- this check is necessary because ships could get destroyed before this callback is executed
+            ships[ship.index.string] = true
+            ship:registerCallback("onDestroyed", "onShipDestroyed")
+        end
+    end
+
+    -- resolve intersections between generated ships
+    Placer.resolveIntersections(generated)
+
+    PirateAttack.attackersGenerated = true
+end
+
+function PirateAttack.update(timeStep)
+
+    if not PirateAttack.attackersGenerated then return end
 
     -- check if all ships are still there
     -- ships might have changed sector or deleted in another way, which doesn't trigger destruction callback
     local sector = Sector()
-    for i, entityIndex in pairs(ships) do
-        local pirate = sector:getEntity(entityIndex)
+    for id, _ in pairs(ships) do
+        local pirate = sector:getEntity(id)
         if pirate == nil then
-            ships[i] = nil
+            ships[id] = nil
         end
     end
 
     -- if not -> end event
     if tablelength(ships) == 0 then
-        endEvent()
+        PirateAttack.endEvent()
     end
 end
 
-function onShipDestroyed(shipIndex)
+function PirateAttack.onShipDestroyed(shipIndex)
 
-    ships[shipIndex] = nil
+    ships[shipIndex.string] = nil
 
     local ship = Entity(shipIndex)
-    local damagers = {ship:getDamageContributorPlayers()}
-    for i, v in pairs(damagers) do
-        participants[v] = v
+    local damagers = {ship:getDamageContributors()}
+    for _, damager in pairs(damagers) do
+        if not Faction(damager).isAIFaction then
+            participants[damager] = damager
+        end
     end
 
     -- if they're all destroyed, the event ends
     if tablelength(ships) == 0 then
-        endEvent()
+        PirateAttack.endEvent()
     end
 end
 
 
-function endEvent()
-
-    local messages =
-    {
-        "Thank you for defeating those pirates. You have our endless gratitude."%_t,
-        "We thank you for taking care of those ships. We transferred a reward to your account."%_t,
-        "Thank you for taking care of those pirates. We transferred a reward to your account."%_t,
-    }
+function PirateAttack.endEvent()
 
     local faction = Galaxy():getLocalFaction(Sector():getCoordinates())
     if faction then
-        -- give payment to players who participated
-        for i, v in pairs(participants) do
-            local player = Player(i)
 
-            player:sendChatMessage(faction.name, 0, getRandomEntry(messages))
-            player:receive(reward)
-            Galaxy():changeFactionRelations(player, faction, reputation)
+        local messages =
+        {
+            "Thank you for defeating those pirates. You have our endless gratitude."%_t,
+            "We thank you for taking care of those ships. We transferred a reward to your account."%_t,
+            "Thank you for taking care of those pirates. We transferred a reward to your account."%_t,
+        }
+
+        -- give payment to players/alliances who participated
+        for _, participant in pairs(participants) do
+            local participantFaction = Faction(participant)
+
+            participantFaction:sendChatMessage(faction.name, 0, getRandomEntry(messages))
+            participantFaction:receive("Received %1% credits for defeating a pirate attack."%_T, reward)
+            Galaxy():changeFactionRelations(participantFaction, faction, reputation)
 
             local x, y = Sector():getCoordinates()
             local object
@@ -240,7 +225,7 @@ function endEvent()
                 object = UpgradeGenerator.generateSystem(Rarity(RarityType.Uncommon))
             end
 
-            if object then player:getInventory():add(object) end
+            if object then participantFaction:getInventory():add(object) end
         end
     end
 

@@ -1,6 +1,6 @@
---- ../avorion-stock/data/scripts/player/eventscheduler.lua	2018-02-17 11:55:22.365840400 -0600
-+++ ../avorion-event-balance/data/scripts/player/eventscheduler.lua	2017-03-27 15:07:55.050534200 -0500
-@@ -5,12 +5,15 @@
+--- ../avorion-stock/data/scripts/player/eventscheduler.lua	2019-02-10 13:06:20.155889800 -0600
++++ ../avorion-event-balance/data/scripts/player/eventscheduler.lua	2019-02-26 04:54:40.210802300 -0600
+@@ -5,6 +5,10 @@
  require ("randomext")
  require ("utility")
  
@@ -11,53 +11,19 @@
  local events =
  {
      {schedule = random():getInt(45, 60) * 60, script = "convoidistresssignal", arguments = {true}, to = 560},
-     {schedule = random():getInt(60, 80) * 60, script = "fakedistresssignal", arguments = {true}, to = 560},
--    {schedule = random():getInt(60, 80) * 60, script = "pirateattackstarter", to = 560},
--    {schedule = random():getInt(60, 80) * 60, script = "traderattackedbypiratesstarter", to = 560},
-+    {schedule = random():getInt(60, 80) * 60, script = "piratehunter", to = 560},
-     {schedule = random():getInt(25, 50) * 60, script = "alienattack", arguments = {0}, minimum = 5 * 60, from = 0, to = 500},
-     {schedule = random():getInt(35, 70) * 60, script = "alienattack", arguments = {1}, minimum = 25 * 60, to = 500},
-     {schedule = random():getInt(60, 80) * 60, script = "alienattack", arguments = {2}, minimum = 60 * 60, to = 350},
-@@ -18,14 +21,13 @@
+@@ -18,7 +22,10 @@
      {schedule = random():getInt(50, 70) * 60, script = "spawntravellingmerchant", to = 520},
  }
  
 -local pause = 5 * 60
--local pauseTime = pause
 +-- <dcc title="increase event delay">
 +local pause = (5 * 60) * EventBalance.PauseMultiplier
 +-- </dcc>
++
+ local pauseTime = pause
  
---- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
---- namespace EventScheduler
--EventScheduler = {}
-+local pauseTime = pause
- 
--function EventScheduler.initialize()
-+function initialize()
-     for _, event in pairs(events) do
-         event.time = (event.minimum or 5 * 60) + math.random() * event.schedule
-     end
-@@ -39,16 +41,13 @@
- 
- end
- 
--function EventScheduler.getUpdateInterval()
-+function getUpdateInterval()
-     return 5
- end
- 
--function EventScheduler.updateServer(timeStep)
-+function updateServer(timeStep)
-     local player = Player()
- 
--    local x, y = Sector():getCoordinates()
--    if x == 0 and y == 0 then return end
--
-     -- timeStep = timeStep * 60
- 
-     -- only run script for the lowest player index in the sector -> no stacking events
-@@ -58,8 +57,10 @@
+ -- Don't remove or alter the following comment, it tells the game the namespace this script lives in. If you remove it, the script will break.
+@@ -58,8 +65,10 @@
          if p.index < player.index then return end
      end
  
@@ -70,7 +36,7 @@
  
      if pauseTime > 0 then
          pauseTime = pauseTime - timeStep
-@@ -77,6 +78,15 @@
+@@ -77,6 +86,15 @@
  
              local position = length(vec2(Sector():getCoordinates()))
              if position >= from and position <= to then
@@ -86,21 +52,3 @@
                  -- start event
                  local arguments = event.arguments or {}
                  Player():addScriptOnce(event.script, unpack(arguments))
-@@ -94,7 +104,7 @@
- end
- 
- 
--function EventScheduler.secure()
-+function secure()
-     local times = {}
- 
-     for _, event in pairs(events) do
-@@ -104,7 +114,7 @@
-     return times
- end
- 
--function EventScheduler.restore(times)
-+function restore(times)
-     for i = 1, math.min(#times, #events) do
-         events[i].time = times[i]
-     end
